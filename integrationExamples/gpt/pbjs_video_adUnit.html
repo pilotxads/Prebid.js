@@ -22,6 +22,7 @@
     }
   </style>
   <script src="/build/dev/prebid.js" async=true></script>
+  <script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>
   <script>
 
   var pbjs = pbjs || {};
@@ -39,7 +40,8 @@ adapters.json.
     mediaTypes: { video: {} },
     bids: [
       {
-        bidder: 'appnexusAst',
+        // bidder: 'ozone',
+        bidder: 'pilotx',
         params: {
           placementId: '123456',
           video: {
