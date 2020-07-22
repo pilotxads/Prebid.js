@@ -1,9 +1,11 @@
 import * as utils from '../src/utils.js';
 import {config} from '../src/config.js';
-import { BANNER, VIDEO } from '../src/mediaTypes.js';
+import { BANNER, VIDEO, NATIVE } from '../src/mediaTypes.js';
 import { registerBidder } from '../src/adapters/bidderFactory.js';
 // http://localhost:9999/integrationExamples/gpt/pbjs_video_adUnit.html?pbjs_debug=true
 // http://prebid.org/dev-docs/bidder-adaptor.html
+// pbjs.getBidResponses(); check bidresponse in console
+// https://git.online-solution.biz/osi/prebidjs/commit/10ec9a599f46502b14ef41bf09173c36c959d7d5
 const BIDDER_CODE = 'pilotx';
 const ENDPOINT_URL = 'https://sparta.bwaserver.com/hb';
 const CURRENCY = 'USD';
@@ -16,7 +18,14 @@ export const spec = {
 
   isBidRequestValid: function(bid) {
     utils.logInfo('PilotX: isBidRequestValid : ', config.getConfig(), bid, !!(bid.params.hashes && utils.isArray(bid.params.hashes)));
-    return !!(bid.params.hashes && utils.isArray(bid.params.hashes));
+    // return !!(bid.params.hashes && utils.isArray(bid.params.hashes));
+    if (bid.bidder !== BIDDER_CODE || typeof bid.params === 'undefined') {
+      return false;
+    }
+    if (typeof bid.params.placementId === 'undefined') {
+      return false;
+    }
+    return true;
   },
 
   buildRequests: function(validBidRequests) {
