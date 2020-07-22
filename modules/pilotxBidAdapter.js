@@ -51,29 +51,10 @@ export const spec = {
     };
   },
 
-  // buildRequests: function(validBidRequests) {
-  //   let requests = [];
-  //   utils.logInfo('PilotX: buildRequests : ', validBidRequests);
-  //   utils._each(validBidRequests, function(bid) {
-  //     requests.push({
-  //       method: 'POST',
-  //       url: ENDPOINT_URL,
-  //       options: {
-  //         contentType: 'application/json',
-  //         withCredentials: true
-  //       },
-  //       data: JSON.stringify({
-  //         transaction_id: bid.bidId,
-  //         hashes: utils.getBidIdParameter('hashes', bid.params)
-  //       }),
-  //       bidId: bid.bidId
-  //     });
-  //   });
-
-  //   return requests;
-  // },
 
   interpretResponse: function(serverResponse, bidRequest) {
+    utils.logInfo('== PILOTX 8== ', serverResponse);
+    utils.logInfo('== PILOTX 9== ', bidRequest);
     try {
       utils.logInfo('=== PILOTX ====')
       const response = serverResponse.body;
