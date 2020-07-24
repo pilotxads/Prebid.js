@@ -6,6 +6,7 @@ import { registerBidder } from '../src/adapters/bidderFactory.js';
 // http://prebid.org/dev-docs/bidder-adaptor.html
 // pbjs.getBidResponses(); check bidresponse in console
 // https://git.online-solution.biz/osi/prebidjs/commit/10ec9a599f46502b14ef41bf09173c36c959d7d5
+// http://localhost:9999/integrationExamples/gpt/pbjs_video_adUnit.html?pbjs_debug=true&pbjs_testbids=true
 const BIDDER_CODE = 'pilotx';
 const ENDPOINT_URL = 'http://sparta.bwaserver.com/hb';
 const CURRENCY = 'USD';
@@ -17,14 +18,16 @@ export const spec = {
   supportedMediaTypes: [VIDEO, BANNER],
 
   isBidRequestValid: function(bid) {
-    utils.logInfo('PilotX: isBidRequestValid : ', config.getConfig(), bid, !!(bid.params.hashes && utils.isArray(bid.params.hashes)));
-    // return !!(bid.params.hashes && utils.isArray(bid.params.hashes));
-    if (bid.bidder !== BIDDER_CODE || !bid.hasOwnProperty('params') || !bid.hasOwnProperty('sizes')) {
+    utils.logInfo('PilotX: isBidRequestValid : ', config.getConfig(), bid, ' == ', bid.sizes.length);
+    if (bid.bidder !== BIDDER_CODE || !bid.hasOwnProperty('params')) {
       return false;
     }
-    // if (!bid.params.placementId || !bid.sizes.length) {
-    //   return false;
-    // }
+    if (!bid.params.placementId) {
+      return false;
+    }
+    if (bid.mediaTypes.hasOwnProperty('banner') && bid.sizes.length < 1) {
+      return false;
+    }
 
     return true;
   },
@@ -35,7 +38,7 @@ export const spec = {
 
     utils._each(validBidRequests, function(bid) {
       utils.logInfo('== PILOTX 3== ', bid)
-      bid.sizes = [[300, 250], [300, 600]];
+      // bid.sizes = [[300, 250], [300, 600]];
       utils.logInfo('== PILOTX 4== ', bid.sizes)
       payloadItems[1] = [bid.sizes[0][0], bid.sizes[0][1], bid.bidId]
     });
@@ -51,31 +54,32 @@ export const spec = {
     };
   },
 
-
   interpretResponse: function(serverResponse, bidRequest) {
-    utils.logInfo('== PILOTX 8== ', serverResponse);
-    utils.logInfo('== PILOTX 9== ', bidRequest);
+    utils.logInfo('== PILOTX 8 serverResponse == ', serverResponse);
+    utils.logInfo('== PILOTX 9 bidRequest == ', bidRequest);
     try {
-      utils.logInfo('=== PILOTX ====')
-      const response = serverResponse.body;
+      const response = serverResponse.body.seatbid[0].bid;
+      const requested = JSON.parse(bidRequest.data)[1];
+      utils.logInfo('=== PILOTX 10 ====', response);
+      utils.logInfo('=== PILOTX 11 ====', requested);
       const bidResponses = [];
 
       utils._each(response, function(bidResponse) {
         if (!bidResponse.is_passback) {
           bidResponses.push({
-            requestId: bidRequest.bidId,
+            requestId: requested[2],
             cpm: bidResponse.price,
-            width: bidResponse.size[0],
-            height: bidResponse.size[1],
-            creativeId: bidResponse.hash,
+            width: requested[0],
+            height: requested[1],
+            creativeId: bidResponse.crid,
             currency: CURRENCY,
             netRevenue: false,
             ttl: TIME_TO_LIVE,
-            ad: bidResponse.content
+            ad: bidResponse.adm
           });
         }
       });
-
+      utils.logInfo('=== PILOTX 12 ====', bidResponses)
       return bidResponses;
     } catch (err) {
       utils.logInfo('=== PILOTX ====')
