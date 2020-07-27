@@ -6,7 +6,7 @@
   NOTE that many ad servers won't send back an ad if the URL is localhost... so you might need to
   set an alias in your /etc/hosts file so that you can load this page from a different domain.
 -->
-
+<!-- http://localhost:9999/integrationExamples/gpt/hello_world.html?pbjs_debug=true&pbjs_testbids=true -->
 <html>
 <head>
     <script async src="../../build/dev/prebid.js"></script>
@@ -24,7 +24,7 @@
             },
             // Replace this object to test a new Adapter!
             bids: [{
-                bidder: 'appnexus',
+                bidder: 'pilotx',
                 params: {
                     placementId: 13144370
                 }

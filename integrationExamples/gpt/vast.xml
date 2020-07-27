@@ -1,0 +1,106 @@
+<VAST version="2.0">
+<Ad id="12111">
+<InLine>
+<AdSystem version="1.0">
+<![CDATA[ PILOTX ]]>
+</AdSystem>
+<AdTitle>
+<![CDATA[ MOBILE APP TEST FLIGHT - FORD FUSION ]]>
+</AdTitle>
+<Error>
+<![CDATA[ https://adn.pilotx.tv/err?err=[ERRORCODE]&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Error>
+<Impression>
+<![CDATA[ https://adn.pilotx.tv/imp?pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Impression>
+<Impression>
+<![CDATA[ https://fqtag.com/img?org=d2qg9fnl7kwsPYYcTA4j&te=7200&rt=display&p=4157&fmt=video&tn=1595886451000&reqip=68.4.254.97&s=26394265712330819&a=1019&cmp=1&mode=autoplay&make=&mdl=&lat=33.681600&lon=-117.830200&rd=tools.pilotx.tv&ua=Mozilla%2F5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_3%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F84.0.4147.89%20Safari%2F537.36 ]]>
+</Impression>
+<Creatives>
+<Creative id="1211" sequence="1">
+<Linear skipoffset="00:00:05">
+<AdParameters/>
+<Duration>
+<![CDATA[ 00:00:13 ]]>
+</Duration>
+<MediaFiles>
+<MediaFile id="980" delivery="progressive" type="video/mp4" width="1280" height="720" bitrate="2313" maintainAspectRatio="true" scalable="true">
+<![CDATA[ https://video.pilotx.tv/1211/HyMH6Gaq7.mp4 ]]>
+</MediaFile>
+<MediaFile id="980" delivery="progressive" type="video/webm" width="1280" height="720" bitrate="1333" maintainAspectRatio="true" scalable="true">
+<![CDATA[ https://video.pilotx.tv/1211/HyMH6Gaq7.webm ]]>
+</MediaFile>
+</MediaFiles>
+<TrackingEvents>
+<Tracking event="creativeView">
+<![CDATA[ https://adn.pilotx.tv/ev?event=creativeView&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="skip">
+<![CDATA[ https://adn.pilotx.tv/ev?event=skip&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="start">
+<![CDATA[ https://adn.pilotx.tv/ev?event=start&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="firstQuartile">
+<![CDATA[ https://adn.pilotx.tv/ev?event=firstQuartile&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="midpoint">
+<![CDATA[ https://adn.pilotx.tv/ev?event=midpoint&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="thirdQuartile">
+<![CDATA[ https://adn.pilotx.tv/ev?event=thirdQuartile&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="complete">
+<![CDATA[ https://adn.pilotx.tv/ev?event=complete&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="mute">
+<![CDATA[ https://adn.pilotx.tv/ev?event=mute&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="unmute">
+<![CDATA[ https://adn.pilotx.tv/ev?event=unmute&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="pause">
+<![CDATA[ https://adn.pilotx.tv/ev?event=pause&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="rewind">
+<![CDATA[ https://adn.pilotx.tv/ev?event=rewind&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="resume">
+<![CDATA[ https://adn.pilotx.tv/ev?event=resume&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="fullscreen">
+<![CDATA[ https://adn.pilotx.tv/ev?event=fullscreen&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="exitFullscreen">
+<![CDATA[ https://adn.pilotx.tv/ev?event=exitFullScreen&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="expand">
+<![CDATA[ https://adn.pilotx.tv/ev?event=expand&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="collapse">
+<![CDATA[ https://adn.pilotx.tv/ev?event=collapse&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="acceptInvitation">
+<![CDATA[ https://adn.pilotx.tv/ev?event=acceptInvitation&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="close">
+<![CDATA[ https://adn.pilotx.tv/ev?event=close&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+<Tracking event="progress" offset="00:00:05">
+<![CDATA[ https://adn.pilotx.tv/ev?event=progress&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</Tracking>
+</TrackingEvents>
+<VideoClicks>
+<ClickThrough>
+<![CDATA[ https://altus4u.com/ ]]>
+</ClickThrough>
+<ClickTracking>
+<![CDATA[ https://adn.pilotx.tv/ev?event=click&pid=1019&fid=1211&vw=2&w=640&h=480&pageurl=tools.pilotx.tv&domain=pilotx.tv&tid=26394265712330819&tdata=kn8AVk5CCAABAAEAIj0QCABAc0sfXwoAY4AC4AEBABUAYAABAAIAAhcAQQAAAHgGAA8CAB%2FgCwAxXipeKl4qXipeKgA%3D&fdata=kU0AVk4AALsEAAEAEQEGAAYIACDUAw4ACQIAFQUlAAACAOALADFeKl4qXipeKl4qAA%3D%3D ]]>
+</ClickTracking>
+</VideoClicks>
+</Linear>
+</Creative>
+</Creatives>
+</InLine>
+</Ad>
+</VAST>

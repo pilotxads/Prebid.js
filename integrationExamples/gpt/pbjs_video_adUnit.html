@@ -22,7 +22,6 @@
     }
   </style>
   <script src="/build/dev/prebid.js" async=true></script>
-  <script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>
   <script>
 
   var pbjs = pbjs || {};
@@ -36,16 +35,10 @@ adapters.json.
 */
   var videoAdUnit = {
     code: 'video1',
-    // mediaTypes: { video: {} },
-    mediaTypes: {
-              banner: {
-                sizes: [[300, 250]]
-              } 
-            },
+    sizes: [640,480],
+    mediaTypes: { video: {}, playerSize: [640, 480] },
     bids: [
       {
-        // bidder: 'ozone',
-        sizes: [300, 250],
         bidder: 'pilotx',
         params: {
           placementId: '123456',
@@ -55,7 +48,7 @@ adapters.json.
             playback_method: ['auto_play_sound_off']
           }
         }
-      },
+      }
     ]
   };
 
@@ -84,18 +77,13 @@ adapters.json.
 <body>
 
   <div class="example-video-container">
-    <video 
-        id="vid1" 
-        class="video-js vjs-default-skin" 
-        autoplay 
-        controls 
-        preload="auto"
-        poster="https://video-js.zencoder.com/oceans-clip.png"
+    <video id="vid1" class="video-js vjs-default-skin" autoplay controls preload="auto"
+        poster="http://video-js.zencoder.com/oceans-clip.png"
         data-setup='{}'
         width='640'
         height='480'
         >
-      <source src="https://vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
+      <source src="http://vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
 
       <p>Video Playback Not Supported</p>
     </video>
