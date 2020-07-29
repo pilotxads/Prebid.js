@@ -1,34 +1,55 @@
 # Overview
 ```
-Module Name: Adlive Bid Adapter
+Module Name: PilotX Bid Adapter
 Module Type: Bidder Adapter
-Maintainer: traffic@adlive.io
+Maintainer: desmond@pilotx.tv
 ```
 
 # Description
-Module that connects to Adlive's server for bids.
-Currently module supports only banner mediaType.
+Module that connects to PilotX's demand source(s).
+PilotX module currently supports video and banner mediaType.
 
-# Test Parameters
+# Banner Test Parameters 
 ```
-    var adUnits = [{
-        code: '/test/div',
-        mediaTypes: {
-            banner: {
-                sizes: [[300, 250]]
-            }
-        },
-        bids: [{
-            bidder: 'adlive',
+    const adUnits = [{
+    code: 'div-gpt-ad-1460505748561-0',
+    mediaTypes: {
+        banner: {
+            sizes: [[300, 250]],
+        }
+    },
+    bids: [{
+        bidder: 'pilotx',
+        params: {
+            placementId: 13144370
+        }
+    }]
+
+}];
+```
+# Video Test Parameters 
+PilotX Project bid adapter supports Instream and Outstream Video.
+```
+    const videoAdUnit = {
+    code: 'video1',
+    mediaTypes: {
+        video: {
+            context: 'instream',
+            playerSize: [640, 480]
+        }
+    },
+    bids: [
+        {
+            bidder: 'pilotx',
             params: {
-                hashes: ['1e100887dd614b0909bf6c49ba7f69fdd1360437']
+                placementId: '123456',
+                video: {
+                    id: 123,
+                    skipppable: true,
+                    playback_method: ['auto_play_sound_off']
+                }
             }
-        }]
-    }];
+        }
+    ]
+};
 ```
-# SAMPLE RESPONSE 
-# {"id":"b97fae24-7c36-4fc8-9201-789d07e8b6aa","seatbid":[{"bid":[{"adm":"<img src=\"http://lh3.googleusercontent.com/npew9dDnrDUsZl3lrIzjGAUr2SGR6qC2XLteyiNSeAp2SumD-eE3cruubr5FunAWyq0=w300-h250\" width=\"300\" height=250\" />","adomain":["nordvpn.com"],"cat":["IAB19"],"cid":"1_117","crid":"1_88_1877","id":"b97fae24-7c36-4fc8-9201-789d07e8b6aa","impid":"1","iurl":"https://d2mluzprf1s92y.cloudfront.net/image?enc_d=MriMMCwn68bLlo6zXrPFg0ZpY4fC8eAA%2BYCDnUjtTtlPnf3EaPw9GaFXeVN6S76T","nurl":"http://sparta.bwaserver.com/2/WIN","price":11,"bid":"2c5e5aac7c4b26"}]}]}
-
-# http://localhost:9999/integrationExamples/gpt/pbjs_video_adUnit.html?pbjs_debug=true&pbjs_testbids=true
-# http://localhost:9999/integrationExamples/gpt/hello_world.html?pbjs_debug=true&pbjs_testbids=true
-# https://sonobi.atlassian.net/wiki/spaces/PP/pages/867106817/Prebid+Video+Ad+Manager+Integration+Guide
