@@ -9,7 +9,7 @@ import { registerBidder } from '../src/adapters/bidderFactory.js';
 // http://localhost:9999/integrationExamples/gpt/pbjs_video_adUnit.html?pbjs_debug=true&pbjs_testbids=true
 // http://localhost:9999/integrationExamples/gpt/hello_world.html?pbjs_debug=true&pbjs_testbids=true
 const BIDDER_CODE = 'pilotx';
-const ENDPOINT_URL = 'http://sparta.bwaserver.com/hb';
+const ENDPOINT_URL = 'http://localhost:3003/px_prebid_endpoint';
 const CURRENCY = 'USD';
 const TIME_TO_LIVE = 360;
 
@@ -39,10 +39,12 @@ export const spec = {
 
     utils._each(validBidRequests, function(bid) {
       utils.logInfo('== PILOTX 3== ', bid)
+      utils.logInfo('== PILOTX 3x== ', Object.keys(bid.mediaTypes)[0])
       // bid.sizes = [[300, 250], [300, 600]];
       // bid.sizes = [[640, 480]];
       utils.logInfo('== PILOTX 4== ', bid.sizes)
-      payloadItems[1] = [bid.sizes[0][0], bid.sizes[0][1], bid.bidId]
+      // added mediatype
+      payloadItems[1] = [bid.sizes[0][0], bid.sizes[0][1], bid.bidId, Object.keys(bid.mediaTypes)[0]]
     });
     utils.logInfo('== PILOTX 5== ', payloadItems);
     const payload = payloadItems;
@@ -68,20 +70,8 @@ export const spec = {
 
       utils._each(response, function(bidResponse) {
         if (!bidResponse.is_passback) {
-          // if ('banner' in imp) {
-          //   prBid.mediaType = BANNER;
-          //   prBid.width = rtbBid.w;
-          //   prBid.height = rtbBid.h;
-          //   prBid.ad = formatAdMarkup(rtbBid);
-          // } else if ('video' in imp) {
-          //   prBid.mediaType = VIDEO;
-          //   prBid.vastUrl = rtbBid.nurl;
-          //   prBid.width = imp.video.w;
-          //   prBid.height = imp.video.h;
-          // }
-
-          bidResponses.push({
-            mediaType: VIDEO,
+          utils.logInfo('xbidResponse === ', bidResponse);
+          let payload = {
             requestId: requested[2],
             cpm: bidResponse.price,
             width: requested[0],
@@ -89,11 +79,16 @@ export const spec = {
             creativeId: bidResponse.crid,
             currency: CURRENCY,
             netRevenue: false,
-            ttl: TIME_TO_LIVE,
-            // ad: bidResponse.adm
-            // ad: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
-            vastUrl: `http://localhost:9999/integrationExamples/gpt/vast.xml`
-          });
+            ttl: TIME_TO_LIVE
+          }
+          if (bidResponse.media_type === VIDEO) {
+            payload.mediaType = VIDEO;
+            payload.vastUrl = bidResponse.adm
+          } else {
+            payload.mediaType = BANNER;
+            payload.ad = bidResponse.adm;
+          }
+          bidResponses.push(payload);
         }
       });
       utils.logInfo('=== PILOTX 12 ====', bidResponses)
