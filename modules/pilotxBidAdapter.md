@@ -28,8 +28,10 @@ PilotX module currently supports video and banner mediaType.
 }];
 ```
 # Video Test Parameters 
-PilotX Project bid adapter supports Instream and Outstream Video.
+PilotX Project bid adapter only supports Instream and Outstream Video.
 ```
+//Instream Video adUnit
+
     const videoAdUnit = {
     code: 'video1',
     mediaTypes: {
@@ -45,8 +47,34 @@ PilotX Project bid adapter supports Instream and Outstream Video.
                 placementId: '123456',
                 video: {
                     id: 123,
-                    skipppable: true,
-                    playback_method: ['auto_play_sound_off']
+                    skipppable: true, /* optional */
+                    playback_method: ['auto_play_sound_off'] /* optional */
+                }
+            }
+        }
+    ]
+};
+
+
+//Outstream Video adUnit
+
+ const videoAdUnit = {
+    code: 'video1',
+    mediaTypes: {
+        video: {
+            context: 'outstream',
+            playerSize: [640, 480]
+        }
+    },
+    bids: [
+        {
+            bidder: 'pilotx',
+            params: {
+                placementId: '123456',
+                video: {
+                    id: 123,
+                    skipppable: true, /* optional */
+                    playback_method: ['auto_play_sound_off'] /* optional */
                 }
             }
         }

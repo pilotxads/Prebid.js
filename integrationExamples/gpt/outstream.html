@@ -1,0 +1,105 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>PilotX - Prebid.js video adUnit example</title>
+ 
+    <!-- videojs -->
+    <link rel="stylesheet" href="http://vjs.zencdn.net/5.9.2/video-js.css">
+    <script type="text/javascript" src="http://vjs.zencdn.net/5.9.2/video.js"></script>
+ 
+    <!-- videojs-vast-vpaid -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs.vast.vpaid.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs_5.vast.vpaid.min.js"></script>
+ 
+    <!-- prebid.js -->
+    <!-- <script src="/build/dist/prebid.js" async=true></script> -->
+    <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+    <script src="/build/dev/prebid.js" ></script>
+ 
+ 
+    <script>
+     var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+
+    var PREBID_TIMEOUT = 1000;
+      /*
+         Prebid Video adUnit
+         */
+      var adUnits = [{
+         code: 'video1',
+         mediaTypes: {
+            video: {context: 'outstream', playerSize: [640, 480]}
+         },
+         bids: [
+            {
+               bidder: 'pilotx',
+               params: {
+                placementId: '123456',
+                video: {
+                    id: 123,
+                    skipppable: true,
+                    playback_method: ['auto_play_sound_off']
+                }
+        }
+            }
+         ]
+      }];
+      pbjs.que.push(function() {
+        pbjs.addAdUnits(adUnits);
+        pbjs.requestBids({
+            bidsBackHandler: initAdserver
+        });
+    });
+
+    function initAdserver() {
+        if (pbjs.initAdserverSet) return;
+        pbjs.initAdserverSet = true;
+        googletag.cmd.push(function() {
+            pbjs.que.push(function() {
+                pbjs.setTargetingForGPTAsync();
+                googletag.pubads().refresh();
+            });
+        });
+    }
+
+    setTimeout(function() {
+        initAdserver();
+    }, PREBID_TIMEOUT);
+
+    googletag.cmd.push(function() {
+        var slot1 = googletag.defineSlot('/19968336/prebid_outstream_adunit_1', [[1, 1]], 'video1').addService(googletag.pubads());
+        googletag.pubads().disableInitialLoad();
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+    });
+
+    </script>
+</head>
+ 
+<body>
+ 
+<h2>PilotX Prebid Video -- video.js</h2>
+ 
+<div class="example-video-container">
+ 
+   
+<div id='video1'>
+    <p>Prebid Outstream Video Ad</p>
+    <script type='text/javascript'>
+        googletag.cmd.push(function() {
+            googletag.display('video1');
+        });
+
+    </script>
+</div>
+</div>
+ 
+
+</body>
+</html>

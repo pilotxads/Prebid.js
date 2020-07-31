@@ -1106,6 +1106,7 @@ function newRenderer(adUnitCode, rendererOptions = {}) {
   } catch (err) {
     utils.logWarn('OZONE Prebid Error calling setRender on renderer', err);
   }
+  utils.logInfo('NEW RENDERER === ', renderer)
   return renderer;
 }
 function outstreamRender(bid) {
