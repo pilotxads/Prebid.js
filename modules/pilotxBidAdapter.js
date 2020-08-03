@@ -17,6 +17,7 @@ import { Renderer } from '../src/Renderer.js';
 // http://localhost:9999/integrationExamples/gpt/outstream.html?pbjs_debug=true&pbjs_testbids=true
 // http://prebid.org/prebid-video/video-overview.html
 // https://developer.spotxchange.com/content/local/docs/HeaderBidding/PrebidAdapter.md
+// http://prebid.org/examples/video/outstream/pb-ve-outstream-no-server.html
 const BIDDER_CODE = 'pilotx';
 const ENDPOINT_URL = 'http://localhost:3003/px_prebid_endpoint';
 const PILOTX_RENDERER_URL = 'http://localhost:3003/pilotx-renderer.js';
@@ -69,7 +70,7 @@ export const spec = {
         mediaTypes: bid.mediaTypes
       }
       if (utils.deepAccess(bid, 'mediaTypes.video.context') === 'outstream') {
-        obj.outstream_option = utils.deepAccess(bid, 'params.outstream_options')
+        obj.outstream_options = utils.deepAccess(bid, 'params.outstream_options')
       }
       const payload = JSON.stringify(obj)
       utils.logInfo('== PILOTX 7== ', payload);
@@ -115,21 +116,45 @@ export const spec = {
           if (mediaType === VIDEO) {
             payload.mediaType = VIDEO;
             payload.vastUrl = bidResponse.vastUrl;
-            if (requested.mediaTypes.video.context === 'outstream') {
-              let config = {
-                playerId: bidResponse.bid,
-                width: requested.width,
-                height: requested.height,
-                vastUrl: bidResponse.vastUrl,
+            if (utils.deepAccess(requested, 'mediaTypes.video.context') === 'outstream') {
+              payload.adUrl = bidResponse.vastUrl;
+              payload.ad = mediaType;
+              const renderer = Renderer.install({
+                id: requested.bidId,
+                url: '//',
+                loaded: false,
+                config: {
+                  adText: 'PilotX Prebid.js Outstream Video Ad',
+                  width: requested.width,
+                  height: requested.height,
+                  options: utils.deepAccess(requested, 'outstream_options'),
+                }
+              });
+
+              try {
+                utils.logInfo('=== calling outstreamRender ====')
+                renderer.setRender(outstreamRender);
+                renderer.setEventHandlers({
+                  impression: function impression() {
+                    return utils.logInfo('PilotX outstream event:impression event');
+                  },
+                  loaded: function loaded() {
+                    return utils.logMessage('PilotX outstream event:loaded event');
+                  },
+                  ended: function ended() {
+                    utils.logInfo('PilotX outstream event: ended');
+                  }
+                });
+              } catch (err) {
+                utils.logError('Prebid Error:', err);
               }
-              utils.logInfo(`PilotX: Attaching a renderer to OUTSTREAM video`);
-              payload.renderer = newRenderer(bidResponse.bid, config);
-              // requested.outstream_option
+              payload.renderer = renderer;
             }
           } else {
             payload.mediaType = BANNER;
             payload.ad = bidResponse.adm;
           }
+          utils.logMessage('[PX]: ', payload);
           bidResponses.push(payload);
         }
       });
@@ -142,32 +167,21 @@ export const spec = {
   }
 };
 
-/* Rendering video ads - create a renderer instance, mark it as not loaded, set a renderer function.
-The renderer function will not assume that the renderer script is loaded - it will push() the ultimate render function call
-*/
-function newRenderer(adUnitCode, rendererOptions = {}) {
-  utils.logInfo(adUnitCode, ' == NEW RENDERER == ', rendererOptions);
-  const renderer = Renderer.install({
-    url: PILOTX_RENDERER_URL,
-    id: adUnitCode,
-    config: rendererOptions,
-    loaded: true,
-    adUnitCode
-  });
+function outstreamRender(bid) {
   try {
-    renderer.setRender(outstreamRender);
-  } catch (err) {
-    utils.logInfo('PILOTX Prebid Error calling setRender on renderer', err);
+    utils.logInfo('outstreamRender was called: ', bid);
+    loadScriptSync(PILOTX_RENDERER_URL)
+  } catch (error) {
+    utils.logError('outstreamRender errror: ', bid);
   }
-  return renderer;
 }
 
-function outstreamRender(bid) {
-  utils.logInfo('PILOTX: outstreamRender called. Going to push the call to window.pilotxVideo.outstreamRender(bid) bid =', bid);
-  // push to render queue because pilotxVideo may not be loaded yet
-  bid.renderer.push(() => {
-    window.pilotxVideo.outstreamRender(bid);
-  });
+function loadScriptSync(src) {
+  var s = document.createElement('script');
+  s.src = src;
+  s.type = 'text/javascript';
+  s.async = false; // <-- this is important
+  document.getElementsByTagName('head')[0].appendChild(s);
 }
 
 registerBidder(spec);
