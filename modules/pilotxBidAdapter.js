@@ -14,7 +14,9 @@ import { Renderer } from '../src/Renderer.js';
 // e &pbjs_testbids=true
 // http://localhost:9999/integrationExamples/gpt/multi.html?pbjs_debug=true&pbjs
 // _ testbids=true
-//http://localhost:9999/integrationExamples/gpt/outstream.html?pbjs_debug=true&pbjs_testbids=true
+// http://localhost:9999/integrationExamples/gpt/outstream.html?pbjs_debug=true&pbjs_testbids=true
+// http://prebid.org/prebid-video/video-overview.html
+// https://developer.spotxchange.com/content/local/docs/HeaderBidding/PrebidAdapter.md
 const BIDDER_CODE = 'pilotx';
 const ENDPOINT_URL = 'http://localhost:3003/px_prebid_endpoint';
 const PILOTX_RENDERER_URL = 'http://localhost:3003/pilotx-renderer.js';
@@ -29,20 +31,27 @@ export const spec = {
   ],
 
   isBidRequestValid: function (bid) {
-    utils.logInfo('PilotX: isBidRequestValid : ', config.getConfig(), bid, ' == ', bid.sizes.length);
-    if (bid.bidder !== BIDDER_CODE || !bid.hasOwnProperty('params') || !bid.hasOwnProperty('sizes') || !bid.hasOwnProperty('mediaTypes')) {
+    utils.logInfo('PilotX: isBidRequestValid : ', config.getConfig(), bid, ' == ', bid.sizes.length, 'bid.mediaTypes.video == ', utils.deepAccess(bid, 'mediaTypes'));
+    if (bid.bidder !== BIDDER_CODE || !utils.deepAccess(bid, 'params') || !utils.deepAccess(bid, 'sizes') || !utils.deepAccess(bid, 'mediaTypes')) {
+      utils.logError('PilotX: Error 1 == ');
       return false;
     }
-    if (!bid.params.placementId || !bid.sizes.length) {
+    if (!utils.deepAccess(bid, 'params.placementId') || !bid.sizes.length || !utils.isArray(bid.sizes)) {
+      utils.logError('PilotX: Error 2 == ');
       return false;
     }
-    if (bid.mediaTypes.hasOwnProperty(VIDEO)) {
-      if (!bid.mediaTypes[VIDEO].hasOwnProperty('context')) {
+    if (utils.deepAccess(bid, 'mediaTypes.video')) {
+      utils.logInfo('PilotX: VIDEO == ');
+      if (!utils.deepAccess(bid, 'mediaTypes.video.context')) {
         utils.logError('PilotX: == Video Context Not Found == ');
         return false;
       }
-      if (bid.mediaTypes[VIDEO].context !== 'instream' && bid.mediaTypes[VIDEO].context !== 'outstream') {
+      if (utils.deepAccess(bid, 'mediaTypes.video.context') !== 'instream' && utils.deepAccess(bid, 'mediaTypes.video.context') !== 'outstream') {
         utils.logError('PilotX: == Invalid Video Context == ');
+        return false;
+      }
+      if (utils.deepAccess(bid, 'mediaTypes.video.context') === 'outstream' && !utils.deepAccess(bid, 'params.outstream_options.slot')) {
+        utils.logError('PilotX: == Invalid OutStream Slot == ');
         return false;
       }
     }
@@ -51,13 +60,18 @@ export const spec = {
 
   buildRequests: function (validBidRequests) {
     const requests = [];
-    const payloadItems = {};
     utils.logInfo('== PILOTX validBidRequests == ', validBidRequests)
     utils._each(validBidRequests, function (bid) {
-      payloadItems[1] = [
-        bid.sizes[0][0], bid.sizes[0][1], bid.bidId, bid.mediaTypes
-      ]
-      const payload = JSON.stringify(payloadItems)
+      const obj = {
+        width: bid.sizes[0][0],
+        height: bid.sizes[0][1],
+        bidId: bid.bidId,
+        mediaTypes: bid.mediaTypes
+      }
+      if (utils.deepAccess(bid, 'mediaTypes.video.context') === 'outstream') {
+        obj.outstream_option = utils.deepAccess(bid, 'params.outstream_options')
+      }
+      const payload = JSON.stringify(obj)
       utils.logInfo('== PILOTX 7== ', payload);
       requests.push({
         method: 'POST',
@@ -75,7 +89,7 @@ export const spec = {
     utils.logInfo('== PILOTX 9 bidRequest == ', bidRequest);
     try {
       const response = serverResponse.body.seatbid[0].bid;
-      const requested = JSON.parse(bidRequest.data)[1];
+      const requested = JSON.parse(bidRequest.data);
       utils.logInfo('=== PILOTX 10 ====', response);
       utils.logInfo('=== PILOTX 11 ====', requested);
       const bidResponses = [];
@@ -83,31 +97,34 @@ export const spec = {
       utils._each(response, function (bidResponse) {
         if (!bidResponse.is_passback) {
           utils.logInfo('xbidResponse === ', bidResponse);
+          let mediaType = Object.keys(requested.mediaTypes)[0]
           const payload = {
-            requestId: requested[2],
+            requestId: requested.bidId,
             cpm: bidResponse.price,
-            width: requested[0],
-            height: requested[1],
+            width: requested.width,
+            height: requested.height,
             creativeId: bidResponse.crid,
             currency: CURRENCY,
             netRevenue: false,
             ttl: TIME_TO_LIVE,
             meta: {
-              mediaType: bidResponse.media_type,
+              mediaType,
               advertiserDomains: bidResponse.adomain
             }
           }
-          if (bidResponse.media_type === VIDEO) {
+          if (mediaType === VIDEO) {
             payload.mediaType = VIDEO;
             payload.vastUrl = bidResponse.vastUrl;
-            if (bidResponse.context === 'outstream') {
+            if (requested.mediaTypes.video.context === 'outstream') {
               let config = {
                 playerId: bidResponse.bid,
-                width: requested[0],
-                height: requested[1],
+                width: requested.width,
+                height: requested.height,
                 vastUrl: bidResponse.vastUrl,
               }
+              utils.logInfo(`PilotX: Attaching a renderer to OUTSTREAM video`);
               payload.renderer = newRenderer(bidResponse.bid, config);
+              // requested.outstream_option
             }
           } else {
             payload.mediaType = BANNER;
@@ -134,7 +151,7 @@ function newRenderer(adUnitCode, rendererOptions = {}) {
     url: PILOTX_RENDERER_URL,
     id: adUnitCode,
     config: rendererOptions,
-    loaded: false,
+    loaded: true,
     adUnitCode
   });
   try {

@@ -37,15 +37,7 @@
                     video: {
                         skippable: true,
                         playback_method: ['auto_play_sound_off']
-                    },
-                    // outstream only
-                    outstream_options: {
-                    slot: 'adSlot1',
-                    width: 640, // optional
-                    height: 480, // optional
-                    volume: 0, // optional
-                    containerId: 'video1' // optional
-            }
+                    }
                 }
             }]
         };
@@ -63,6 +55,18 @@
             pbjs.requestBids({
                 bidsBackHandler: function(bids) {
                     console.log('THE BIDDS === ', bids);
+                    // var videoUrl = pbjs.adServers.dfp.buildVideoUrl({
+                    //     adUnit: videoAdUnit,
+                    //     // bids.video1.bids[0].vastUrl
+                    //     params: {
+                    //         iu: '/19968336/prebid_cache_video_adunit',
+                    //         cust_params: {
+                    //             section: 'blog',
+                    //             anotherKey: 'anotherValue'
+                    //         },
+                    //         output: 'vast'
+                    //     }
+                    // });
                     invokeVideoPlayer(bids.video1.bids[0].vastUrl);
                 }
             });
