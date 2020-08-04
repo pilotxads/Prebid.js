@@ -20,7 +20,7 @@ import { Renderer } from '../src/Renderer.js';
 // http://prebid.org/examples/video/outstream/pb-ve-outstream-no-server.html
 const BIDDER_CODE = 'pilotx';
 const ENDPOINT_URL = 'http://localhost:3003/px_prebid_endpoint';
-const PILOTX_RENDERER_URL = 'http://localhost:3003/pilotx-renderer.js';
+const PILOTX_PLAYER_URL = 'https://player.pilotx.tv/v2/player.min.js';
 const CURRENCY = 'USD';
 const TIME_TO_LIVE = 360;
 
@@ -167,21 +167,60 @@ export const spec = {
   }
 };
 
+// config would specific the player type
+// if no player or adslot return slider Player
+
 function outstreamRender(bid) {
+  // renderer.config.options
   try {
+    // Script not loaded
+    const w = utils.getBidIdParameter('width', bid.renderer.config.options);
+    const h = utils.getBidIdParameter('height', bid.renderer.config.options);
+    // const vastUrl = utils.getBidIdParameter('vastUrl', bid.renderer.config.options);
+    const adSlot = utils.getBidIdParameter('slot', bid.renderer.config.options);
     utils.logInfo('outstreamRender was called: ', bid);
-    loadScriptSync(PILOTX_RENDERER_URL)
-  } catch (error) {
-    utils.logError('outstreamRender errror: ', bid);
+    if (!isMyScriptLoaded()) {
+      const script = document.createElement('script');
+      // script.src = `${PILOTX_PLAYER_URL}?w=${w}&h=${h}&pid=${vastUrl}page_url=${window.location.href}`;
+      script.src = PILOTX_PLAYER_URL
+      script.type = 'text/javascript';
+      script.async = false; // <-- this is important
+      const node = window.document.getElementById(adSlot);
+      if (node.nodeName == 'IFRAME' || node.ownerDocument !== document) {
+        let doc = null;
+        const iframe = document.getElementById(adSlot);
+        if (iframe.contentDocument) {
+          doc = iframe.contentDocument;
+        } else {
+          doc = iframe.contentWindow.document;
+        }
+        doc.body.appendChild(script);
+      } else {
+        window.document.getElementsByTagName('head')[0].appendChild(script);
+      }
+    }
+    if (adSlot && window.document.getElementById(adSlot)) {
+      const div = `<div class='pilot-video standard' data-view='desktop' 
+    data-tag='https://adn.pilotx.tv/vast?pid=1019&pageurl=${window.location.href}&domain=${window.location.hostname}&w=${w}&h=${h}' 
+    data-id='pid-1241' data-width='640' data-height='360'></div>`
+      window.document.getElementById(adSlot).innerHTML = div;
+    }
+  } catch (err) {
+    utils.logError('[PX][renderer] Error:' + err.message)
   }
 }
 
-function loadScriptSync(src) {
-  var s = document.createElement('script');
-  s.src = src;
-  s.type = 'text/javascript';
-  s.async = false; // <-- this is important
-  document.getElementsByTagName('head')[0].appendChild(s);
+function isMyScriptLoaded() {
+  try {
+    const scripts = document.getElementsByTagName('script');
+    for (let i = scripts.length; i--;) {
+      if (scripts[i].src == PILOTX_PLAYER_URL) return true;
+    }
+  } catch (error) {
+    return false;
+  }
+
+  return false;
 }
 
 registerBidder(spec);
