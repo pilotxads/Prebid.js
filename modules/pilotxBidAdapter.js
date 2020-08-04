@@ -41,6 +41,10 @@ export const spec = {
       utils.logError('PilotX: Error 2 == ');
       return false;
     }
+    if (!utils.deepAccess(bid, 'mediaTypes.video') && !utils.deepAccess(bid, 'mediaTypes.banner')) {
+      utils.logError('PilotX: Invalid Media Type == ');
+      return false;
+    }
     if (utils.deepAccess(bid, 'mediaTypes.video')) {
       utils.logInfo('PilotX: VIDEO == ');
       if (!utils.deepAccess(bid, 'mediaTypes.video.context')) {
@@ -69,6 +73,7 @@ export const spec = {
         bidId: bid.bidId,
         mediaTypes: bid.mediaTypes
       }
+      // video options
       if (utils.deepAccess(bid, 'mediaTypes.video.context') === 'outstream') {
         obj.outstream_options = utils.deepAccess(bid, 'params.outstream_options')
       }
@@ -134,17 +139,6 @@ export const spec = {
               try {
                 utils.logInfo('=== calling outstreamRender ====')
                 renderer.setRender(outstreamRender);
-                renderer.setEventHandlers({
-                  impression: function impression() {
-                    return utils.logInfo('PilotX outstream event:impression event');
-                  },
-                  loaded: function loaded() {
-                    return utils.logMessage('PilotX outstream event:loaded event');
-                  },
-                  ended: function ended() {
-                    utils.logInfo('PilotX outstream event: ended');
-                  }
-                });
               } catch (err) {
                 utils.logError('Prebid Error:', err);
               }
@@ -179,31 +173,44 @@ function outstreamRender(bid) {
     // const vastUrl = utils.getBidIdParameter('vastUrl', bid.renderer.config.options);
     const adSlot = utils.getBidIdParameter('slot', bid.renderer.config.options);
     utils.logInfo('outstreamRender was called: ', bid);
-    if (!isMyScriptLoaded()) {
-      const script = document.createElement('script');
-      // script.src = `${PILOTX_PLAYER_URL}?w=${w}&h=${h}&pid=${vastUrl}page_url=${window.location.href}`;
-      script.src = PILOTX_PLAYER_URL
-      script.type = 'text/javascript';
-      script.async = false; // <-- this is important
-      const node = window.document.getElementById(adSlot);
-      if (node.nodeName == 'IFRAME' || node.ownerDocument !== document) {
-        let doc = null;
-        const iframe = document.getElementById(adSlot);
-        if (iframe.contentDocument) {
-          doc = iframe.contentDocument;
-        } else {
-          doc = iframe.contentWindow.document;
+    // if (!isMyScriptLoaded()) {
+    const script = document.createElement('script');
+    // script.src = `${PILOTX_PLAYER_URL}?w=${w}&h=${h}&pid=${vastUrl}page_url=${window.location.href}`;
+    script.src = PILOTX_PLAYER_URL
+    script.type = 'text/javascript';
+    script.async = false; // <-- this is important
+
+    const node = window.document.getElementById(adSlot);
+    // }
+    let vastUrl = utils.deepAccess(bid, 'vastUrl')
+    const adVideo = `<div class='pilot-video ${adSlot && node ? `in_article` : `slider`}' data-view='desktop' 
+    data-tag='${vastUrl}&pageurl=${window.location.href}&domain=${window.location.hostname}&w=${w}&h=${h}' 
+    data-id='pid-1241' data-width='640' data-height='360'></div>`
+
+    const newDiv = document.createElement('div');
+    newDiv.innerHTML = adVideo;
+
+    if (adSlot && node) {
+      if (node.nodeName == 'IFRAME') {
+        let framedoc = node.contentDocument;
+        if (!framedoc && node.contentWindow) {
+          framedoc = node.contentWindow.document;
         }
-        doc.body.appendChild(script);
+        // node.body.appendChild(newDiv);
+        utils.logInfo('=== PILOTX 1209 ====', framedoc)
+        framedoc.getElementsByTagName('head')[0].appendChild(script);
+        framedoc.body.appendChild(newDiv);
       } else {
+        if (!isMyScriptLoaded()) {
+          window.document.getElementsByTagName('head')[0].appendChild(script);
+        }
+        window.document.getElementById(adSlot).innerHTML = adVideo;
+      }
+    } else {
+      if (!isMyScriptLoaded()) {
         window.document.getElementsByTagName('head')[0].appendChild(script);
       }
-    }
-    if (adSlot && window.document.getElementById(adSlot)) {
-      const div = `<div class='pilot-video standard' data-view='desktop' 
-    data-tag='https://adn.pilotx.tv/vast?pid=1019&pageurl=${window.location.href}&domain=${window.location.hostname}&w=${w}&h=${h}' 
-    data-id='pid-1241' data-width='640' data-height='360'></div>`
-      window.document.getElementById(adSlot).innerHTML = div;
+      document.body.appendChild(newDiv);
     }
   } catch (err) {
     utils.logError('[PX][renderer] Error:' + err.message)
