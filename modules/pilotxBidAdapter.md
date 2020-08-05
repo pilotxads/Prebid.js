@@ -32,52 +32,46 @@ PilotX Project bid adapter only supports Instream and Outstream Video.
 ```
 //Instream Video adUnit
 
-    const videoAdUnit = {
+    var videoAdUnit = [{
     code: 'video1',
     mediaTypes: {
         video: {
-            context: 'instream',
-            playerSize: [640, 480]
+            playerSize: [640, 480],
+            context: 'instream'
         }
     },
-    bids: [
-        {
-            bidder: 'pilotx',
-            params: {
-                placementId: '123456',
-                video: {
-                    id: 123,
-                    skipppable: true, /* optional */
-                    playback_method: ['auto_play_sound_off'] /* optional */
-                }
+    bids: [{
+        bidder: 'pilotx',
+        params: {
+            placementId: 13232361,
+            video: {
+                skippable: true,
+                playback_method: ['auto_play_sound_off']
             }
         }
-    ]
-};
+    }]
+}];
 
 
 //Outstream Video adUnit
 
- const videoAdUnit = {
-    code: 'video1',
-    mediaTypes: {
-        video: {
-            context: 'outstream',
-            playerSize: [640, 480]
-        }
-    },
-    bids: [
-        {
+    var videoAdUnit = [{
+        code: 'video1',
+        mediaTypes: {
+            video: {
+                playerSize: [640, 480],
+                context: 'outstream'
+            }
+        },
+        bids: [{
             bidder: 'pilotx',
             params: {
-                placementId: '123456',
+                placementId: 13232361,
                 video: {
-                    id: 123,
-                    skipppable: true, /* optional */
-                    playback_method: ['auto_play_sound_off'] /* optional */
+                    skippable: true,
+                    playback_method: ['auto_play_sound_off']
                 }
             }
-        }
-    ]
-};
+        }]
+    }];
 ```

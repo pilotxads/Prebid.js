@@ -33,11 +33,11 @@ export const spec = {
 
   isBidRequestValid: function (bid) {
     utils.logInfo('PilotX: isBidRequestValid : ', config.getConfig(), bid, ' == ', bid.sizes.length, 'bid.mediaTypes.video == ', utils.deepAccess(bid, 'mediaTypes'));
-    if (bid.bidder !== BIDDER_CODE || !utils.deepAccess(bid, 'params') || !utils.deepAccess(bid, 'sizes') || !utils.deepAccess(bid, 'mediaTypes')) {
+    if (bid.bidder !== BIDDER_CODE || !utils.deepAccess(bid, 'params') || !utils.deepAccess(bid, 'mediaTypes') || !utils.deepAccess(bid, 'adUnitCode')) {
       utils.logError('PilotX: Error 1 == ');
       return false;
     }
-    if (!utils.deepAccess(bid, 'params.placementId') || !bid.sizes.length || !utils.isArray(bid.sizes)) {
+    if (!utils.deepAccess(bid, 'params.placementId')) {
       utils.logError('PilotX: Error 2 == ');
       return false;
     }
@@ -55,10 +55,6 @@ export const spec = {
         utils.logError('PilotX: == Invalid Video Context == ');
         return false;
       }
-      if (utils.deepAccess(bid, 'mediaTypes.video.context') === 'outstream' && !utils.deepAccess(bid, 'params.outstream_options.slot')) {
-        utils.logError('PilotX: == Invalid OutStream Slot == ');
-        return false;
-      }
     }
     return true;
   },
@@ -67,15 +63,14 @@ export const spec = {
     const requests = [];
     utils.logInfo('== PILOTX validBidRequests == ', validBidRequests)
     utils._each(validBidRequests, function (bid) {
+      const sizes = utils.getBidIdParameter('sizes', bid);
+      utils.logInfo('== PX SIZES ==', sizes);
       const obj = {
-        width: bid.sizes[0][0],
-        height: bid.sizes[0][1],
-        bidId: bid.bidId,
-        mediaTypes: bid.mediaTypes
-      }
-      // video options
-      if (utils.deepAccess(bid, 'mediaTypes.video.context') === 'outstream') {
-        obj.outstream_options = utils.deepAccess(bid, 'params.outstream_options')
+        width: utils.isArray(sizes) && sizes.length ? sizes[0][0] : 640,
+        height: utils.isArray(sizes) && sizes.length ? sizes[0][1] : 480,
+        bidId: utils.getBidIdParameter('bidId', bid),
+        mediaTypes: utils.getBidIdParameter('mediaTypes', bid),
+        adUnitCode: utils.getBidIdParameter('adUnitCode', bid)
       }
       const payload = JSON.stringify(obj)
       utils.logInfo('== PILOTX 7== ', payload);
@@ -132,7 +127,9 @@ export const spec = {
                   adText: 'PilotX Prebid.js Outstream Video Ad',
                   width: requested.width,
                   height: requested.height,
-                  options: utils.deepAccess(requested, 'outstream_options'),
+                  options: {
+                    slot: requested.adUnitCode
+                  },
                 }
               });
 
@@ -165,30 +162,23 @@ export const spec = {
 // if no player or adslot return slider Player
 
 function outstreamRender(bid) {
-  // renderer.config.options
   try {
-    // Script not loaded
     const w = utils.getBidIdParameter('width', bid.renderer.config.options);
     const h = utils.getBidIdParameter('height', bid.renderer.config.options);
-    // const vastUrl = utils.getBidIdParameter('vastUrl', bid.renderer.config.options);
     const adSlot = utils.getBidIdParameter('slot', bid.renderer.config.options);
     utils.logInfo('outstreamRender was called: ', bid);
-    // if (!isMyScriptLoaded()) {
     const script = document.createElement('script');
-    // script.src = `${PILOTX_PLAYER_URL}?w=${w}&h=${h}&pid=${vastUrl}page_url=${window.location.href}`;
     script.src = PILOTX_PLAYER_URL
     script.type = 'text/javascript';
-    script.async = false; // <-- this is important
+    script.async = false; // important
 
     const node = window.document.getElementById(adSlot);
-    // }
     let vastUrl = utils.deepAccess(bid, 'vastUrl')
     const adVideo = `<div class='pilot-video ${adSlot && node ? `in_article` : `slider`}' data-view='desktop' 
     data-tag='${vastUrl}&pageurl=${window.location.href}&domain=${window.location.hostname}&w=${w}&h=${h}' 
     data-id='pid-1241' data-width='640' data-height='360'></div>`
-
-    const newDiv = document.createElement('div');
-    newDiv.innerHTML = adVideo;
+    const adContanier = document.createElement('div');
+    adContanier.innerHTML = adVideo;
 
     if (adSlot && node) {
       if (node.nodeName == 'IFRAME') {
@@ -196,10 +186,10 @@ function outstreamRender(bid) {
         if (!framedoc && node.contentWindow) {
           framedoc = node.contentWindow.document;
         }
-        // node.body.appendChild(newDiv);
+        // node.body.appendChild(adContanier);
         utils.logInfo('=== PILOTX 1209 ====', framedoc)
         framedoc.getElementsByTagName('head')[0].appendChild(script);
-        framedoc.body.appendChild(newDiv);
+        framedoc.body.appendChild(adContanier);
       } else {
         if (!isMyScriptLoaded()) {
           window.document.getElementsByTagName('head')[0].appendChild(script);
@@ -210,7 +200,7 @@ function outstreamRender(bid) {
       if (!isMyScriptLoaded()) {
         window.document.getElementsByTagName('head')[0].appendChild(script);
       }
-      document.body.appendChild(newDiv);
+      document.body.appendChild(adContanier);
     }
   } catch (err) {
     utils.logError('[PX][renderer] Error:' + err.message)
